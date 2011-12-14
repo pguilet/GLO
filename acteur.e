@@ -7,20 +7,21 @@ note
 class
 	ACTEUR
 
-	create make
+	create
+ 		make
 
-	feature
-
-		listeAttributsActeur : ARRAYED_LIST[TYPEACTEUR]
+ 	feature
+ 		id:STRING
+ 		typeActeur:STRING
+ 		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
 
 		make
 		do
-			create listeAttributsActeur.make(0)
+			create listeAttributsJeu.make(0)
 		end
 
-		ajouterAttribut(attribut : ATTRIBUT)
+ 		ajouterAttribut(attribut : ATTRIBUT)
  		do
- 			listeAttributsActeur.put_front(attribut)
+ 			listeAttributsJeu.put_front(attribut)
  		end
-
 end
