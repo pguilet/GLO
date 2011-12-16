@@ -24,11 +24,11 @@ feature {NONE} -- Initialization
 	do
 		--| Add your code here
 
-		create jeu.make
-		create attributString.makeAttributString("NomAttribut 1")
-		jeu.ajouterAttribut(attributString)
+	--	create jeu.make
+	--	create attributString.makeAttributString("NomAttribut 1")
+	--	jeu.ajouterAttribut(attributString)
 
-		create attributInteger.makeAttributInteger("NomAttribut 2")
+	--	create attributInteger.makeAttributInteger("NomAttribut 2")
 	--	jeu.ajouterAttribut(attribut)
 	--	jeu.listeAttributsJeu.at(2).inserervaleur (1)
 	--	jeu.listeAttributsJeu.at(1).inserervaleur ("chien")

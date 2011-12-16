@@ -1,5 +1,5 @@
-Compiler version: 6.8.8.6627 GPL Edition - linux-x86
+Compiler version: 7.0.8.8074 GPL Edition - windows - compatible
 Type: Quick_melt
 batch mode: False
 new session: True
-starting date: 12/02/2011 4:50:44.515 PM
+starting date: 12/16/2011 3:05:24.609 PM

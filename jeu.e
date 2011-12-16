@@ -14,8 +14,10 @@ class
  		y:INTEGER
  		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
 
-		make
+		make (xi,yi :INTEGER)
 		do
+			x:=xi
+			y:=yi
 			create listeAttributsJeu.make(0)
 		end
 
