@@ -15,8 +15,9 @@ class
  		typeActeur:STRING
  		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
 
-		make
+		make (ty:STRING)
 		do
+			typeacteur:=ty
 			create listeAttributsJeu.make(0)
 		end
 

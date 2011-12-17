@@ -13,14 +13,17 @@ class
  		x:INTEGER
  		y:INTEGER
  		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
-
-		make (xi,yi :INTEGER)
+	feature {ANY}
+		make
 		do
-			x:=xi
-			y:=yi
 			create listeAttributsJeu.make(0)
 		end
 
+		coordonnees(xi,yi:INTEGER)
+		do
+			x:=xi
+			y:=yi
+		end
  		ajouterAttribut(attribut : ATTRIBUT)
  		do
  			listeAttributsJeu.put_front(attribut)
