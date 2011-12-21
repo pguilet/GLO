@@ -6,23 +6,22 @@ note
 
 class
 	ACTEUR
-
+	inherit OBJET
 	create
- 		make
+ 		makeActeur
 
  	feature
  		id:STRING
  		typeActeur:STRING
- 		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
 
-		make (ty:STRING)
+ 	feature {ANY}
+		makeActeur (ty:STRING)
 		do
 			typeacteur:=ty
-			create listeAttributsJeu.make(0)
 		end
 
- 		ajouterAttribut(attribut : ATTRIBUT)
- 		do
- 			listeAttributsJeu.put_front(attribut)
- 		end
+		getId:STRING
+		do
+			result:=id
+		end
 end

@@ -6,17 +6,17 @@ note
 --variables globales accessibles &| modifiables depuis toutes les autres classes
 class
 	JEU
+	inherit OBJET
  	create
- 		make
+ 		makeJeu
 
  	feature
  		x:INTEGER
  		y:INTEGER
- 		listeAttributsJeu : ARRAYED_LIST[ATTRIBUT]
+
 	feature {ANY}
-		make
+		makeJeu
 		do
-			create listeAttributsJeu.make(0)
 		end
 
 		coordonnees(xi,yi:INTEGER)
@@ -24,8 +24,4 @@ class
 			x:=xi
 			y:=yi
 		end
- 		ajouterAttribut(attribut : ATTRIBUT)
- 		do
- 			listeAttributsJeu.put_front(attribut)
- 		end
 end
