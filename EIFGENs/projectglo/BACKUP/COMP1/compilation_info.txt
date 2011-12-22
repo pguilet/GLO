@@ -1,5 +1,5 @@
-Compiler version: 7.0.8.8074 GPL Edition - windows - compatible
+Compiler version: 7.0.8.8074 Enterprise Edition - win64
 Type: Quick_melt
 batch mode: False
 new session: True
-starting date: 12/16/2011 3:05:24.609 PM
+starting date: 12/22/2011 4:19:50.868 PM

@@ -17,6 +17,7 @@ class
 	feature {ANY}
 		makeJeu
 		do
+			create listeAttributs.make(0)
 		end
 
 		coordonnees(xi,yi:INTEGER)

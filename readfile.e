@@ -8,8 +8,14 @@ class
 	READFILE
 
 	create
-		read
+		make
+
 	feature {NONE}
+
+		make
+		do
+
+		end
 		reader :PLAIN_TEXT_FILE
 
 		is_comment (w:STRING):BOOLEAN
@@ -19,6 +25,13 @@ class
 			else
 				result:=false
 			end
+
+		end
+
+		trim (s:STRING):STRING
+		do
+			s.replace_substring_all(" ","")
+			result:=s
 
 		end
 
@@ -42,7 +55,7 @@ class
 		end
 
 	feature {ANY}
-		read (file :STRING)
+		parseFichierEtat (file :STRING)
 		do
 			create reader.make_open_read(file)
 		end
@@ -108,4 +121,90 @@ class
 				reader.read_line
 			end --end loop
 		end --stateFile
+
+		parseFichierRegle ( fileName : STRING )
+		local
+			ficregle		: PLAIN_TEXT_FILE
+			ligne			: STRING
+			partieJeu		: BOOLEAN
+			partieActeur	: BOOLEAN
+			partieVictoire	: BOOLEAN
+			partieDefaite	: BOOLEAN
+
+			firstSplit			: LIST[STRING]
+		do
+			partieJeu := false
+			partieActeur := false
+			partieActeur := false
+			partieVictoire := false
+			partieDefaite := false
+
+			create ficregle.make_open_read (fileName)
+
+			print("On commence%N")
+
+			from  ficregle.start
+			until ficregle.off
+			loop
+				ficregle.read_line
+				ligne := ficregle.last_string
+				if(not is_comment(ligne)) then
+					firstSplit := ligne.split (':')
+					if trim(firstSplit.at (1)).is_equal ("JEU") then
+						partieJeu := true
+					elseif trim(firstSplit.at (1)).is_equal ("ACTEUR") then
+						partieJeu := false
+						partieActeur := true
+					elseif trim(firstSplit.at (1)).is_equal ("ITEM") then
+					elseif trim(firstSplit.at (1)).is_equal ("ACTION") then
+						partieActeur := false
+						partieActeur := true
+					elseif trim(firstSplit.at (1)).is_equal ("VICTOIRE") then
+						partieActeur := false
+						partieVictoire := true
+					elseif trim(firstSplit.at (1)).is_equal ("DEFAITE") then
+						partieVictoire := false
+						partieDefaite := true
+					else
+						if partieJeu then
+							-- print("%Nouveau jeu : " + nouveauJeu(ligne) + "%N")
+						elseif partieActeur then
+							print("%Nouveau modele  : " + creerObjet(ligne) + "%N")
+						elseif partieActeur then
+							-- print("Nouvelle action : " + creerAction(ligne) + "%N")
+						elseif partieVictoire then
+							-- creerVictoire(ligne)
+							print("Nouvelle victoire %N")
+						elseif partieDefaite then
+							-- creerDefaite(ligne)
+							print("Nouvelle défaite %N")
+						end
+					end
+				end
+			end
+			ficregle.close
+		end
+
+	creerObjet ( ligne : STRING ) : STRING
+	 	local
+			classDef			: LIST[STRING]
+			attrDef				: LIST[STRING]
+			className			: STRING
+			splitAttr			: LIST[STRING]
+		do
+			classDef := ligne.split (':')
+			className := trim(classDef.at (1))
+			attrDef := classDef.at (2).split ('|')
+			--create objet.make
+			from  attrDef.start
+			until attrDef.off
+			loop
+				if(not trim(attrDef.item).is_empty) then
+					splitAttr := attrDef.item.split ('=')
+					--objet.ajouterAttribut ((create {ATTRIBUT}.make(trim(splitAttr.at (1)), trim(splitAttr.at (2)))))
+				end
+				attrDef.forth
+			end
+			Result := className
+		end
 end

@@ -12,12 +12,13 @@ class
 
  	feature
  		id:STRING
- 		typeActeur:STRING
+ 		typeActeur:TYPEACTEUR
 
  	feature {ANY}
 		makeActeur (ty:STRING)
 		do
 			typeacteur:=ty
+			create listeAttributs.make(0)
 		end
 
 		getId:STRING

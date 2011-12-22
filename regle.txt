@@ -1,0 +1,19 @@
+JEU:
+ plateau:15|15
+ tour:INTEGER
+ACTEUR:
+ Joueur:nom=STRING|pv=INTEGER|att=INTEGER|def=INTEGER|sac=ARRAY
+ Monstre:nom=STRING|pv=INTEGER|att=INTEGER|def=INTEGER|loot=ARRAY
+ITEM:
+ Epee:nom=STRING|att=INTEGER
+ Bouclier:nom=STRING|def=INTEGER
+ // Item de victoire
+ ItemVictoire?:
+ACTION:
+ attaquerMonstre:Joueur(Monstre)|0 pv SUP 0 & 1 pv SUP 0 & 0 sac POSS Epee|MOINS 1 pv 1 pv 0 att & PLUS 1 pv 1 pv 1 def
+ attaquerJoueur:Monstre(Joueur)|0 pv SUP 0 & 1 pv SUP 0 |MOINS 1 pv 1 pv 0 att & PLUS 1 pv 1 pv 1 def
+ ramasserItem:Joueur(Monstre;ItemVictoire?)|1 pv INF 1|CHPOSS 1 loot 0 sac 2
+VICTOIRE:
+ Joueur sac POSS ItemVictoire?
+DEFAITE:
+ Joueur pv INF 

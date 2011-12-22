@@ -1,0 +1,9 @@
+JEU:
+ tour=1
+ACTEUR:
+ Joueur:player|nom=Azel|pv=100|att=15|def=5|x=2|y=6
+ Monstre:boss|nom=Dragon|pv=120|att=9|def=8|x=1|y=6
+ITEM:
+ Epee:E1|nom=EpeeEnchantee?|att=0|possesseur=player|possAttr=sac
+ Bouclier:B1|nom=Bouclier radieux|def=0|possesseur=player|possAttr=sac
+ ItemVictoire:EpeeSacree?|possesseur=boss|possAttr=loot 

@@ -11,19 +11,20 @@ class
 		makeItem
 	feature {NONE}
 		id:STRING
-		type:STRING
+		type:TYPEITEM
 
 	feature {ANY}
 		makeItem (ty:STRING)
 		do
 			type:=ty
+			create listeAttributs.make(0)
 		end
 
 		getId:STRING
 		do
 			result:=id
 		end
-		
+
 		getType:STRING
 		do
 			result:=type

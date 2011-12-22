@@ -19,15 +19,19 @@ feature {NONE} -- Initialization
 	listeAction: ARRAYED_LIST[ACTION]
 	listeVictoire: ARRAYED_LIST[VICTOIRE]
 	listeDefaite: ARRAYED_LIST[DEFAITE]
+	listeTypeActeur: ARRAYED_LIST[TYPEACTEUR]
+	listeTypeItem: ARRAYED_LIST[TYPEITEM]
 
 	read:READFILE
 	make
 		-- Run application.
 	do
 		--| Add your code here
-		create read.read("../regle");
+		print("test")
+		create read.make
+		read.parsefichierregle ("regle.txt",)
 
-
+		print("test2")
 	end
 
 end
