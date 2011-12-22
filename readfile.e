@@ -165,8 +165,8 @@ class
 					elseif trim(firstSplit.at (1)).is_equal ("DEFAITE") then
 						partieVictoire := false
 						partieDefaite := true
-					else
-						if partieJeu then
+					end
+					if partieJeu then
 							-- print("%Nouveau jeu : " + nouveauJeu(ligne) + "%N")
 						elseif partieActeur then
 							print("%Nouveau modele  : " + creerObjet(ligne) + "%N")
@@ -179,7 +179,6 @@ class
 							-- creerDefaite(ligne)
 							print("Nouvelle défaite %N")
 						end
-					end
 				end
 			end
 			ficregle.close
