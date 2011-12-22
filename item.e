@@ -10,6 +10,7 @@ class
 	create
 		makeItem
 	feature {NONE}
+		id:STRING
 		type:STRING
 
 	feature {ANY}
@@ -18,4 +19,13 @@ class
 			type:=ty
 		end
 
+		getId:STRING
+		do
+			result:=id
+		end
+		
+		getType:STRING
+		do
+			result:=type
+		end
 end

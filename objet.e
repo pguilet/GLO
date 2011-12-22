@@ -28,6 +28,17 @@ class
  			result:=listeAttributs
  		end
 
+ 		getAttribut(name:STRING):ATTRIBUT
+ 		do
+ 			from listeAttributs.start
+ 			until listeAttributs.exhausted
+ 			loop
+ 				if(listeAttributs.item.nomattribut.is_equal (name))then
+ 					result:=listeAttributs.item
+ 				end
+ 			end
+ 		end
+
  		setAttribut(name:STRING;value:STRING)
  		local
  			atInt: ATTRIBUTINTEGER

@@ -25,8 +25,8 @@ feature {NONE} -- Initialization
 		-- Run application.
 	do
 		--| Add your code here
-		create read.read("./regle");
-		
+		create read.read("../regle");
+
 
 	end
 

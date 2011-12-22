@@ -51,6 +51,8 @@ class
 		local
 			line:STRING
 			listSplit:LIST[STRING_8]
+			acteur:ACTEUR
+			item:ITEM
 		do
 			line:=""
 			from reader.start
@@ -69,12 +71,40 @@ class
 						listSplit:=reader.last_string.split (':')
 						listSplit:=listSplit.at (1).split ('|')
 						--regarder dans la liste d'acteur
+						from listeActeur.start
+						until listeActeur.exhausted
+						loop
+							if(listeActeur.item.getid.is_equal (listSplit.at (0)))then
+								acteur:=listeActeur.item
+								from listSplit.start
+								until listSplit.exhausted
+								loop
+									listSplit.forth
+									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
+									acteur.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
+								end
+							end--if
+						end
 					elseif(line.is_equal ("ITEM:"))then
 						listSplit:=reader.last_string.split (':')
 						listSplit:=listSplit.at (1).split ('|')
 						--regarder dans la liste d'item
-					end
-				end
+						from listeItem.start
+						until listeItem.exhausted
+						loop
+							if(listeItem.item.getid.is_equal (listSplit.at (0)))then
+								item:=listeItem.item
+								from listSplit.start
+								until listSplit.exhausted
+								loop
+									listSplit.forth
+									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
+									item.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
+								end
+							end --if
+						end
+					end--elseif
+				end-- comment
 				reader.read_line
 			end --end loop
 		end --stateFile
