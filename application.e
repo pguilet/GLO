@@ -14,7 +14,10 @@ create
 
 feature {ANY} -- Initialization
 	jeu: JEU
-	listeActeur: ARRAYED_LIST[ACTEUR]
+	--!attention pourles hashtable la clé est à droite
+	--listeActeur est une hashtable qui a comme clé un string qui représente le type de l'acteur et comme valeur la liste de tous les acteurs de ce type pour un accès plus rapide au données
+
+	listeActeur: HASH_TABLE[ARRAYED_LIST[ACTEUR],STRING]
 	listeItem: ARRAYED_LIST[ITEM]
 	listeAction: ARRAYED_LIST[ACTION]
 	listeVictoire: ARRAYED_LIST[VICTOIRE]
@@ -27,8 +30,11 @@ feature {ANY} -- Initialization
 		-- Run application.
 	do
 		--| Add your code here
+		--initialisation des différente listes
 		create listeTypeActeur.make (0)
 		create listeTypeItem.make (0)
+		create listeItem.make (0)
+		create listeActeur.make (0)
 
 		parsefichierregle ("regle.txt")
 
@@ -66,6 +72,14 @@ feature {ANY} -- Initialization
 				listeTypeItem.item.attributs.forth
 			end
 			listeTypeItem.forth
+		end
+
+		--boucle pour voir les types d'acteur qui ont été inséré dans la hashtable listeActeur
+		from listeActeur.start
+		until listeActeur.off
+		loop
+			print("%N Type d'acteur : "+listeActeur.key_for_iteration)
+			listeActeur.forth
 		end
 	end
 
@@ -132,20 +146,20 @@ feature {ANY} -- Initialization
 						listSplit:=reader.last_string.split (':')
 						listSplit:=listSplit.at (1).split ('|')
 						--regarder dans la liste d'acteur
-						from listeActeur.start
-						until listeActeur.exhausted
-						loop
-							if(listeActeur.item.getid.is_equal (listSplit.at (0)))then
-								acteur:=listeActeur.item
-								from listSplit.start
-								until listSplit.exhausted
-								loop
-									listSplit.forth
+						--from listeActeur.start
+						--until listeActeur.exhausted
+						--loop
+						--	if(listeActeur.item.getid.is_equal (listSplit.at (0)))then
+						--		acteur:=listeActeur.item
+						--		from listSplit.start
+						--		until listSplit.exhausted
+						--		loop
+						--			listSplit.forth
 									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
 								--	acteur.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
-								end
-							end--if
-						end
+						--		end
+						--	end--if
+						-- end
 					elseif(line.is_equal ("ITEM:"))then
 						listSplit:=reader.last_string.split (':')
 						listSplit:=listSplit.at (1).split ('|')
@@ -193,6 +207,7 @@ feature {ANY} -- Initialization
 			typeActeur 		:TYPEACTEUR
 			typeItem 		:TYPEITEM
 			i				:INTEGER
+			listeActeurs	:ARRAYED_LIST[ACTEUR]
 		do
 			partieJeu := false
 			partieActeur := false
@@ -258,6 +273,9 @@ feature {ANY} -- Initialization
 							tokensSDeuxPoint := ligne.split (':')
 							--on créé un type acteur en passant le nom du type en paramètre.
 							create typeActeur.maketypeacteur (tokensSDeuxPoint.at (1))
+							--on initialise la liste d'acteurs qui correspond à la clé qui est le type d'acteur.
+							create listeActeurs.make (0)
+							listeActeur.put (listeActeurs, tokensSDeuxPoint.at (1))
 							tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
 							--on insère tous les attributs du type acteur
 							from i:=1
