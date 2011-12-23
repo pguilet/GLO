@@ -21,8 +21,9 @@ class
 			create attributs.make(0)
 		end
 
-		getId:STRING
+		addAttribute(cle:STRING valeur : STRING)
 		do
-			result:=id
+			attributs.put (valeur, cle)
 		end
+
 end

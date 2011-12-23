@@ -14,10 +14,10 @@ class
 		type:TYPEITEM
 
 	feature {ANY}
-		makeItem (ty:STRING)
+		makeItem (ty:TYPEITEM)
 		do
 			type:=ty
-			create listeAttributs.make(0)
+			makeObjet
 		end
 
 		getId:STRING
@@ -25,7 +25,7 @@ class
 			result:=id
 		end
 
-		getType:STRING
+		getType:TYPEITEM
 		do
 			result:=type
 		end

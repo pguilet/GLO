@@ -7,58 +7,92 @@ note
 class
 	OBJET
 	create
- 		make
+ 		makeObjet
 
  	feature
- 		listeAttributs : ARRAYED_LIST[ATTRIBUT]
+ 		listeAttributsInteger : ARRAYED_LIST[ATTRIBUTTYPESIMPLE[INTEGER]]
+ 		listeAttributsString : ARRAYED_LIST[ATTRIBUTTYPESIMPLE[STRING]]
+ 		listeAttributsArray : ARRAYED_LIST[ATTRIBUTARRAYOFITEM]
 
 	feature {ANY}
-		make
+		makeObjet
 		do
-			create listeAttributs.make(0)
+			create listeAttributsInteger.make(0)
+			create listeAttributsString.make(0)
+			create listeAttributsArray.make(0)
 		end
 
-		ajouterAttribut(attribut : ATTRIBUT)
+		ajouterAttributString(attribut : ATTRIBUTTYPESIMPLE[STRING])
  		do
- 			listeAttributs.put_front(attribut)
+ 			listeAttributsString.put_front(attribut)
  		end
 
- 		getListeAttributs:ARRAYED_LIST[ATTRIBUT]
+ 		getListeAttributsSring:ARRAYED_LIST[ATTRIBUTTYPESIMPLE[STRING]]
  		do
- 			result:=listeAttributs
+ 			result:=listeAttributsString
  		end
 
- 		getAttribut(name:STRING):ATTRIBUT
+ 		getAttributString(name:STRING):ATTRIBUTTYPESIMPLE[STRING]
  		do
- 			from listeAttributs.start
- 			until listeAttributs.exhausted
+ 			from listeAttributsString.start
+ 			until listeAttributsString.exhausted
  			loop
- 				if(listeAttributs.item.nomattribut.is_equal (name))then
- 					result:=listeAttributs.item
+ 				if(listeAttributsString.item.nomattribut.is_equal (name))then
+ 					result:=listeAttributsString.item
  				end
  			end
  		end
 
- 		setAttribut(name:STRING;value:STRING)
+ 		setAttributString(name:STRING;value:STRING)
  		local
- 			atInt: ATTRIBUTINTEGER
-			atStr: ATTRIBUTSTRING
+			atStr: ATTRIBUTTYPESIMPLE[STRING]
  		do
- 			from listeAttributs.start
-			until listeAttributs.exhausted
+ 			from listeAttributsString.start
+			until listeAttributsString.exhausted
 			loop
-				if(listeAttributs.item.nomattribut.is_equal (name))then
-					if(value.is_integer)then
-						atInt.makeAttributInteger(name)
-						atInt.insererValeur(value.to_integer)
-						listeAttributs.replace(atInt)
-					else
-						atStr.makeAttributString(name)
-						atStr.insererValeur(value)
-						listeAttributs.replace(atStr)
-					end
+				if(listeAttributsString.item.nomattribut.is_equal (name))then
+					atStr.makeAttribut(name)
+					atStr.insererValeur(value)
+					listeAttributsString.replace(atStr)
 				end
-				listeAttributs.forth
+				listeAttributsString.forth
+			end
+ 		end
+
+ 		ajouterAttributInteger(attribut : ATTRIBUTTYPESIMPLE[INTEGER])
+ 		do
+ 			listeAttributsInteger.put_front(attribut)
+ 		end
+
+ 		getListeAttributsInteger:ARRAYED_LIST[ATTRIBUTTYPESIMPLE[INTEGER]]
+ 		do
+ 			result:=listeAttributsInteger
+ 		end
+
+ 		getAttributInteger(name:STRING):ATTRIBUTTYPESIMPLE[INTEGER]
+ 		do
+ 			from listeAttributsInteger.start
+ 			until listeAttributsInteger.exhausted
+ 			loop
+ 				if(listeAttributsInteger.item.nomattribut.is_equal (name))then
+ 					result:=listeAttributsInteger.item
+ 				end
+ 			end
+ 		end
+
+ 		setAttributInteger(name:STRING;value:INTEGER)
+ 		local
+ 			atInt: ATTRIBUTTYPESIMPLE[INTEGER]
+ 		do
+ 			from listeAttributsInteger.start
+			until listeAttributsInteger.exhausted
+			loop
+				if(listeAttributsInteger.item.nomattribut.is_equal (name))then
+					atInt.makeAttribut(name)
+					atInt.insererValeur(value.to_integer)
+					listeAttributsInteger.replace(atInt)
+				end
+				listeAttributsInteger.forth
 			end
  		end
 end

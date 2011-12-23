@@ -15,10 +15,10 @@ class
  		typeActeur:TYPEACTEUR
 
  	feature {ANY}
-		makeActeur (ty:STRING)
+		makeActeur (ty:TYPEACTEUR)
 		do
 			typeacteur:=ty
-			create listeAttributs.make(0)
+			makeObjet
 		end
 
 		getId:STRING
