@@ -17,13 +17,13 @@ feature {ANY} -- Initialization
 	--!attention pour les hashtable la clé est à droite
 	--listeActeur est une hashtable qui a comme clé un string qui représente le type de l'acteur et comme valeur la liste de tous les acteurs de ce type pour un accès plus rapide au données
 
-	listeActeur: HASH_TABLE[ARRAYED_LIST[ACTEUR],STRING]
-	listeItem: HASH_TABLE[ARRAYED_LIST[ITEM],STRING]
-	listeAction: ARRAYED_LIST[ACTION]
-	listeVictoire: ARRAYED_LIST[VICTOIRE]
-	listeDefaite: ARRAYED_LIST[DEFAITE]
-	listeTypeActeur: HASH_TABLE[TYPEACTEUR,STRING]
-	listeTypeItem: HASH_TABLE[TYPEITEM,STRING]
+	tableActeur: HASH_TABLE[ACTEUR,STRING]
+	tableItem: HASH_TABLE[ITEM,STRING]
+	tableAction: HASH_TABLE[ACTION,STRING]
+	tableVictoire: HASH_TABLE[VICTOIRE,STRING]
+	tableDefaite: HASH_TABLE[DEFAITE,STRING]
+	tableTypeActeur: HASH_TABLE[TYPEACTEUR,STRING]
+	tableTypeItem: HASH_TABLE[TYPEITEM,STRING]
 
 
 	make
@@ -31,10 +31,10 @@ feature {ANY} -- Initialization
 	do
 		--| Add your code here
 		--initialisation des différente listes
-		create listeTypeActeur.make (0)
-		create listeTypeItem.make (0)
-		create listeItem.make (0)
-		create listeActeur.make (0)
+		create tableTypeActeur.make (0)
+		create tableTypeItem.make (0)
+		create tableItem.make (0)
+		create tableActeur.make (0)
 
 		parsefichierregle ("regle.txt")
 
@@ -47,47 +47,47 @@ feature {ANY} -- Initialization
 		end
 
 		--boucle pour tester le parsage des acteurs du fichier règle
-		from listeTypeActeur.start
-		until listeTypeActeur.off
+		from tableTypeActeur.start
+		until tableTypeActeur.off
 		loop
-			print("%N Attribut Acteur : "+listeTypeActeur.item_for_iteration.typeacteur)
-			from listeTypeActeur.item_for_iteration.attributs.start
-			until listeTypeActeur.item_for_iteration.attributs.off
+			print("%N Attribut Acteur : "+tableTypeActeur.item_for_iteration.typeacteur)
+			from tableTypeActeur.item_for_iteration.attributs.start
+			until tableTypeActeur.item_for_iteration.attributs.off
 			loop
-				print("%N       ->Nom Attribut : "+listeTypeActeur.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+listeTypeActeur.item_for_iteration.attributs.item_for_iteration)
-				listeTypeActeur.item_for_iteration.attributs.forth
+				print("%N       ->Nom Attribut : "+tableTypeActeur.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+tableTypeActeur.item_for_iteration.attributs.item_for_iteration)
+				tableTypeActeur.item_for_iteration.attributs.forth
 			end
-			listeTypeActeur.forth
+			tableTypeActeur.forth
 		end
 
 		--boucle pour tester le parsage des items du fichier règle
-		from listeTypeItem.start
-		until listeTypeItem.off
+		from tableTypeItem.start
+		until tableTypeItem.off
 		loop
-			print("%N Attribut Item : "+listeTypeItem.item_for_iteration.typeitem)
-			from listeTypeItem.item_for_iteration.attributs.start
-			until listeTypeItem.item_for_iteration.attributs.off
+			print("%N Attribut Item : "+tableTypeItem.item_for_iteration.typeitem)
+			from tableTypeItem.item_for_iteration.attributs.start
+			until tableTypeItem.item_for_iteration.attributs.off
 			loop
-				print("%N       ->Nom Attribut : "+listeTypeItem.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+listeTypeItem.item_for_iteration.attributs.item_for_iteration)
-				listeTypeItem.item_for_iteration.attributs.forth
+				print("%N       ->Nom Attribut : "+tableTypeItem.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+tableTypeItem.item_for_iteration.attributs.item_for_iteration)
+				tableTypeItem.item_for_iteration.attributs.forth
 			end
-			listeTypeItem.forth
+			tableTypeItem.forth
 		end
 
 		--boucle pour voir les types d'acteur qui ont été inséré dans la hashtable listeActeur
-		from listeActeur.start
-		until listeActeur.off
+		from tableActeur.start
+		until tableActeur.off
 		loop
-			print("%N Type d'acteur : "+listeActeur.key_for_iteration)
-			listeActeur.forth
+			print("%N Type d'acteur : "+tableActeur.key_for_iteration)
+			tableActeur.forth
 		end
 
 		--boucle pour voir les types d'item qui ont été inséré dans la hashtable listeItem
-		from listeItem.start
-		until listeItem.off
+		from tableItem.start
+		until tableItem.off
 		loop
-			print("%N Type d'item : "+listeItem.key_for_iteration)
-			listeItem.forth
+			print("%N Type d'item : "+tableItem.key_for_iteration)
+			tableItem.forth
 		end
 	end
 
@@ -283,8 +283,6 @@ feature {ANY} -- Initialization
 							--on créé un type acteur en passant le nom du type en paramètre.
 							create typeActeur.maketypeacteur (tokensSDeuxPoint.at (1))
 							--on initialise la liste d'acteurs qui correspond à la clé qui est le type d'acteur.
-							create listeActeurs.make (0)
-							listeActeur.put (listeActeurs, tokensSDeuxPoint.at (1))
 							tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
 							--on insère tous les attributs du type acteur
 							from i:=1
@@ -296,13 +294,11 @@ feature {ANY} -- Initialization
 								end
 								i:=i+1
 							end
-							listeTypeActeur.put (typeActeur, tokensSDeuxPoint.at (1))
+							tableTypeActeur.put (typeActeur, tokensSDeuxPoint.at (1))
 						elseif partieItem and not is_comment(trim(ligne))then
 							tokensSDeuxPoint := ligne.split (':')
 							--on créé un type item en passant le nom du type en paramètre.
 							create typeItem.maketypeitem (tokensSDeuxPoint.at (1))
-							create listeItems.make (0)
-							listeItem.put (listeItems, tokensSDeuxPoint.at (1))
 							--on s'assure qu'il y a bien des attribut pour faire le split sur |
 							if tokensSDeuxPoint.at (2).count>7 then
 								tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
@@ -319,7 +315,7 @@ feature {ANY} -- Initialization
 								end
 
 							end
-							listeTypeItem.put (typeItem, tokensSDeuxPoint.at (1))
+							tableTypeItem.put (typeItem, tokensSDeuxPoint.at (1))
 						elseif partieAction and not is_comment(trim(ligne))then
 
 
