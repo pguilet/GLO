@@ -18,7 +18,7 @@ feature {ANY} -- Initialization
 	--listeActeur est une hashtable qui a comme clé un string qui représente le type de l'acteur et comme valeur la liste de tous les acteurs de ce type pour un accès plus rapide au données
 
 	listeActeur: HASH_TABLE[ARRAYED_LIST[ACTEUR],STRING]
-	listeItem: ARRAYED_LIST[ITEM]
+	listeItem: HASH_TABLE[ARRAYED_LIST[ITEM],STRING]
 	listeAction: ARRAYED_LIST[ACTION]
 	listeVictoire: ARRAYED_LIST[VICTOIRE]
 	listeDefaite: ARRAYED_LIST[DEFAITE]
@@ -80,6 +80,14 @@ feature {ANY} -- Initialization
 		loop
 			print("%N Type d'acteur : "+listeActeur.key_for_iteration)
 			listeActeur.forth
+		end
+
+		--boucle pour voir les types d'item qui ont été inséré dans la hashtable listeItem
+		from listeItem.start
+		until listeItem.off
+		loop
+			print("%N Type d'item : "+listeItem.key_for_iteration)
+			listeItem.forth
 		end
 	end
 
@@ -164,20 +172,20 @@ feature {ANY} -- Initialization
 						listSplit:=reader.last_string.split (':')
 						listSplit:=listSplit.at (1).split ('|')
 						--regarder dans la liste d'item
-						from listeItem.start
-						until listeItem.exhausted
-						loop
-							if(listeItem.item.getid.is_equal (listSplit.at (0)))then
-								item:=listeItem.item
-								from listSplit.start
-								until listSplit.exhausted
-								loop
-									listSplit.forth
+					--	from listeItem.start
+					--	until listeItem.off
+					--	loop
+						--	if(listeItem.item.getid.is_equal (listSplit.at (0)))then
+						--		item:=listeItem.item
+							--	from listSplit.start
+							--	until listSplit.exhausted
+							--	loop
+							--		listSplit.forth
 									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
 								--	item.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
-								end
-							end --if
-						end
+							--	end
+						--	end --if
+					--	end
 					end--elseif
 				end-- comment
 				reader.read_line
@@ -208,6 +216,7 @@ feature {ANY} -- Initialization
 			typeItem 		:TYPEITEM
 			i				:INTEGER
 			listeActeurs	:ARRAYED_LIST[ACTEUR]
+			listeItems		:ARRAYED_LIST[ITEM]
 		do
 			partieJeu := false
 			partieActeur := false
@@ -292,6 +301,8 @@ feature {ANY} -- Initialization
 							tokensSDeuxPoint := ligne.split (':')
 							--on créé un type item en passant le nom du type en paramètre.
 							create typeItem.maketypeitem (tokensSDeuxPoint.at (1))
+							create listeItems.make (0)
+							listeItem.put (listeItems, tokensSDeuxPoint.at (1))
 							--on s'assure qu'il y a bien des attribut pour faire le split sur |
 							if tokensSDeuxPoint.at (2).count>7 then
 								tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
