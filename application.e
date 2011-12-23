@@ -14,7 +14,7 @@ create
 
 feature {ANY} -- Initialization
 	jeu: JEU
-	--!attention pourles hashtable la clé est à droite
+	--!attention pour les hashtable la clé est à droite
 	--listeActeur est une hashtable qui a comme clé un string qui représente le type de l'acteur et comme valeur la liste de tous les acteurs de ce type pour un accès plus rapide au données
 
 	listeActeur: HASH_TABLE[ARRAYED_LIST[ACTEUR],STRING]
@@ -22,8 +22,8 @@ feature {ANY} -- Initialization
 	listeAction: ARRAYED_LIST[ACTION]
 	listeVictoire: ARRAYED_LIST[VICTOIRE]
 	listeDefaite: ARRAYED_LIST[DEFAITE]
-	listeTypeActeur: ARRAYED_LIST[TYPEACTEUR]
-	listeTypeItem: ARRAYED_LIST[TYPEITEM]
+	listeTypeActeur: HASH_TABLE[TYPEACTEUR,STRING]
+	listeTypeItem: HASH_TABLE[TYPEITEM,STRING]
 
 
 	make
@@ -48,28 +48,28 @@ feature {ANY} -- Initialization
 
 		--boucle pour tester le parsage des acteurs du fichier règle
 		from listeTypeActeur.start
-		until listeTypeActeur.exhausted
+		until listeTypeActeur.off
 		loop
-			print("%N Attribut Acteur : "+listeTypeActeur.item.typeacteur)
-			from listeTypeActeur.item.attributs.start
-			until listeTypeActeur.item.attributs.off
+			print("%N Attribut Acteur : "+listeTypeActeur.item_for_iteration.typeacteur)
+			from listeTypeActeur.item_for_iteration.attributs.start
+			until listeTypeActeur.item_for_iteration.attributs.off
 			loop
-				print("%N       ->Nom Attribut : "+listeTypeActeur.item.attributs.key_for_iteration+" Valeur attribut : "+listeTypeActeur.item.attributs.item_for_iteration)
-				listeTypeActeur.item.attributs.forth
+				print("%N       ->Nom Attribut : "+listeTypeActeur.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+listeTypeActeur.item_for_iteration.attributs.item_for_iteration)
+				listeTypeActeur.item_for_iteration.attributs.forth
 			end
 			listeTypeActeur.forth
 		end
 
 		--boucle pour tester le parsage des items du fichier règle
 		from listeTypeItem.start
-		until listeTypeItem.exhausted
+		until listeTypeItem.off
 		loop
-			print("%N Attribut Item : "+listeTypeItem.item.typeitem)
-			from listeTypeItem.item.attributs.start
-			until listeTypeItem.item.attributs.off
+			print("%N Attribut Item : "+listeTypeItem.item_for_iteration.typeitem)
+			from listeTypeItem.item_for_iteration.attributs.start
+			until listeTypeItem.item_for_iteration.attributs.off
 			loop
-				print("%N       ->Nom Attribut : "+listeTypeItem.item.attributs.key_for_iteration+" Valeur attribut : "+listeTypeItem.item.attributs.item_for_iteration)
-				listeTypeItem.item.attributs.forth
+				print("%N       ->Nom Attribut : "+listeTypeItem.item_for_iteration.attributs.key_for_iteration+" Valeur attribut : "+listeTypeItem.item_for_iteration.attributs.item_for_iteration)
+				listeTypeItem.item_for_iteration.attributs.forth
 			end
 			listeTypeItem.forth
 		end
@@ -296,7 +296,7 @@ feature {ANY} -- Initialization
 								end
 								i:=i+1
 							end
-							listeTypeActeur.put_front (typeActeur)
+							listeTypeActeur.put (typeActeur, tokensSDeuxPoint.at (1))
 						elseif partieItem and not is_comment(trim(ligne))then
 							tokensSDeuxPoint := ligne.split (':')
 							--on créé un type item en passant le nom du type en paramètre.
@@ -319,9 +319,15 @@ feature {ANY} -- Initialization
 								end
 
 							end
-							listeTypeItem.put_front (typeItem)
+							listeTypeItem.put (typeItem, tokensSDeuxPoint.at (1))
 						elseif partieAction and not is_comment(trim(ligne))then
-							-- print("Nouvelle action : " + creerAction(ligne) + "%N")
+
+
+
+
+
+
+
 						elseif partieVictoire and not is_comment(trim(ligne)) then
 							-- creerVictoire(ligne)
 							print("Nouvelle victoire %N")
