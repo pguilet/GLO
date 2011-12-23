@@ -11,22 +11,16 @@ class
 		makeItem
 	feature {NONE}
 		id:STRING
-		type:TYPEITEM
 
 	feature {ANY}
-		makeItem (ty:TYPEITEM)
+		makeItem (idi:STRING)
 		do
-			type:=ty
 			makeObjet
+			id:=idi
 		end
 
 		getId:STRING
 		do
 			result:=id
-		end
-
-		getType:TYPEITEM
-		do
-			result:=type
 		end
 end

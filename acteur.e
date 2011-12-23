@@ -10,15 +10,14 @@ class
 	create
  		makeActeur
 
- 	feature
+ 	feature{ANY}
  		id:STRING
- 		typeActeur:TYPEACTEUR
 
  	feature {ANY}
-		makeActeur (ty:TYPEACTEUR)
+		makeActeur (idi:STRING)
 		do
-			typeacteur:=ty
 			makeObjet
+			id:=idi
 		end
 
 		getId:STRING

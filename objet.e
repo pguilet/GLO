@@ -22,6 +22,28 @@ class
 			create listeAttributsArray.make(0)
 		end
 
+		ajouterAttributArray(attribut : ATTRIBUTARRAYOFITEM)
+		do
+			listeAttributsArray.extend (attribut)
+		end
+
+		getListeAttributsArray:ARRAYED_LIST[ATTRIBUTARRAYOFITEM]
+		do
+			result:=listeAttributsArray
+		end
+
+		getAttributArray(name:STRING):ATTRIBUTARRAYOFITEM
+ 		do
+ 			from listeAttributsArray.start
+ 			until listeAttributsArray.exhausted
+ 			loop
+ 				if(listeAttributsArray.item.nomattribut.is_equal (name))then
+ 					result:=listeAttributsArray.item
+ 				end
+ 				listeAttributsArray.forth
+ 			end
+ 		end
+
 		ajouterAttributString(attribut : ATTRIBUTTYPESIMPLE[STRING])
  		do
  			listeAttributsString.put_front(attribut)
@@ -43,19 +65,24 @@ class
  			end
  		end
 
- 		setAttributString(name:STRING;value:STRING)
+ 		setAttributString(name:STRING value:STRING)
  		local
 			atStr: ATTRIBUTTYPESIMPLE[STRING]
+			attributNonPresent:BOOLEAN
  		do
+ 			attributNonPresent:=true
  			from listeAttributsString.start
 			until listeAttributsString.exhausted
 			loop
 				if(listeAttributsString.item.nomattribut.is_equal (name))then
-					atStr.makeAttribut(name)
-					atStr.insererValeur(value)
-					listeAttributsString.replace(atStr)
+					attributNonPresent:=false
 				end
 				listeAttributsString.forth
+			end
+			if(attributNonPresent)then
+				create atStr.makeAttribut(name)
+				atStr.insererValeur(value)
+				listeAttributsString.replace(atStr)
 			end
  		end
 
@@ -80,19 +107,27 @@ class
  			end
  		end
 
- 		setAttributInteger(name:STRING;value:INTEGER)
+ 		setAttributInteger(name:STRING value:INTEGER)
  		local
  			atInt: ATTRIBUTTYPESIMPLE[INTEGER]
+ 			attributNonPresent:BOOLEAN
  		do
+ 			attributNonPresent:=true
  			from listeAttributsInteger.start
 			until listeAttributsInteger.exhausted
 			loop
-				if(listeAttributsInteger.item.nomattribut.is_equal (name))then
-					atInt.makeAttribut(name)
-					atInt.insererValeur(value.to_integer)
-					listeAttributsInteger.replace(atInt)
+				if( listeAttributsInteger.item.nomattribut.is_equal (name))then
+					attributNonPresent:=false
 				end
 				listeAttributsInteger.forth
 			end
+			if( attributNonPresent)then
+				create atInt.makeAttribut(name)
+				atInt.insererValeur(value.to_integer)
+				listeAttributsInteger.put_front(atInt)
+
+			end
  		end
+
+
 end

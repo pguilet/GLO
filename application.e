@@ -15,13 +15,13 @@ create
 feature {ANY} -- Initialization
 	jeu: JEU
 	--!attention pour les hashtable la clé est à droite
-	--listeActeur est une hashtable qui a comme clé un string qui représente le type de l'acteur et comme valeur la liste de tous les acteurs de ce type pour un accès plus rapide au données
-
+	--tableActeur est une hashtable qui a comme clé un string qui représente l'id de l'acteur et comme valeur l'acteur
+	--tableItem,tableAction,tableTypeActeur,tableTypeItem marche de la même manière
 	tableActeur: HASH_TABLE[ACTEUR,STRING]
 	tableItem: HASH_TABLE[ITEM,STRING]
 	tableAction: HASH_TABLE[ACTION,STRING]
-	tableVictoire: HASH_TABLE[VICTOIRE,STRING]
-	tableDefaite: HASH_TABLE[DEFAITE,STRING]
+	listePredicatsVictoire: ARRAYED_LIST[PREDICATVICTOIREDEFAITE]
+	listePredicatsDefaite: ARRAYED_LIST[PREDICATVICTOIREDEFAITE]
 	tableTypeActeur: HASH_TABLE[TYPEACTEUR,STRING]
 	tableTypeItem: HASH_TABLE[TYPEITEM,STRING]
 
@@ -35,9 +35,12 @@ feature {ANY} -- Initialization
 		create tableTypeItem.make (0)
 		create tableItem.make (0)
 		create tableActeur.make (0)
+		create jeu.makejeu
 
-		parsefichierregle ("regle.txt")
+		parseFichierRegle ("regle.txt")
+		parserFichierEtat("etat.txt")
 
+		print("%N---------------------------------------------------TEST PARSAGE REGLE----------------------------------------------------")
 		--boucle pour tester le parsage de jeu du fichier règle
 		from jeu.attributsregle.start
 		until jeu.attributsregle.off
@@ -89,6 +92,86 @@ feature {ANY} -- Initialization
 			print("%N Type d'item : "+tableItem.key_for_iteration)
 			tableItem.forth
 		end
+		print("%N-------------------------------------------------------------------------------------------------------------------------")
+		print("%N---------------------------------------------------TEST PARSAGE ETAT-----------------------------------------------------")
+
+		--boucle pour tester le parsage des acteurs du fichier état
+		from tableActeur.start
+		until tableActeur.off
+		loop
+			print("%N Attributs de l'acteur : "+tableActeur.item_for_iteration.getid)
+			from tableActeur.item_for_iteration.getlisteattributsinteger.start
+			until tableActeur.item_for_iteration.getlisteattributsinteger.exhausted
+			loop
+				print("%N       ->Nom Attribut : "+tableActeur.item_for_iteration.getlisteattributsinteger.item_for_iteration.nomattribut+" Valeur attribut : "+tableActeur.item_for_iteration.getlisteattributsinteger.item_for_iteration.value.out)
+				tableActeur.item_for_iteration.getlisteattributsinteger.forth
+			end
+
+			from tableActeur.item_for_iteration.getlisteattributssring.start
+			until tableActeur.item_for_iteration.getlisteattributssring.exhausted
+			loop
+				print("%N       ->Nom Attribut : "+tableActeur.item_for_iteration.getlisteattributssring.item_for_iteration.nomattribut+" Valeur attribut : "+tableActeur.item_for_iteration.getlisteattributssring.item_for_iteration.value.out)
+				tableActeur.item_for_iteration.getlisteattributssring.forth
+			end
+
+			from tableActeur.item_for_iteration.getlisteattributsarray.start
+			until tableActeur.item_for_iteration.getlisteattributsarray.exhausted
+			loop
+				print("%N       ->Nom de l'array : "+tableActeur.item_for_iteration.getlisteattributsarray.item_for_iteration.nomattribut)
+
+				from tableActeur.item_for_iteration.getlisteattributsarray.item_for_iteration.listeitems.start
+				until tableActeur.item_for_iteration.getlisteattributsarray.item_for_iteration.listeitems.exhausted
+				loop
+						print("%N            ->Nom de l'objet : "+tableActeur.item_for_iteration.getlisteattributsarray.item_for_iteration.listeitems.item_for_iteration.getId)
+						tableActeur.item_for_iteration.getlisteattributsarray.item_for_iteration.listeitems.forth
+				end
+
+				tableActeur.item_for_iteration.getlisteattributsarray.forth
+			end
+
+			tableActeur.forth
+		end
+
+		--boucle pour tester le parsage des items du fichier état
+		from tableItem.start
+		until tableItem.off
+		loop
+			print("%N Attributs de l'item : "+tableItem.item_for_iteration.getid)
+			from tableItem.item_for_iteration.getlisteattributsinteger.start
+			until tableItem.item_for_iteration.getlisteattributsinteger.exhausted
+			loop
+				print("%N       ->Nom Attribut : "+tableItem.item_for_iteration.getlisteattributsinteger.item_for_iteration.nomattribut+" Valeur attribut : "+tableItem.item_for_iteration.getlisteattributsinteger.item_for_iteration.value.out)
+				tableItem.item_for_iteration.getlisteattributsinteger.forth
+			end
+
+			from tableItem.item_for_iteration.getlisteattributssring.start
+			until tableItem.item_for_iteration.getlisteattributssring.exhausted
+			loop
+				print("%N       ->Nom Attribut : "+tableItem.item_for_iteration.getlisteattributssring.item_for_iteration.nomattribut+" Valeur attribut : "+tableItem.item_for_iteration.getlisteattributssring.item_for_iteration.value.out)
+				tableItem.item_for_iteration.getlisteattributssring.forth
+			end
+			tableItem.forth
+		end
+
+
+		--boucle pour tester le parsage du jeu du fichier état
+		print("%N Attributs de jeu : ")
+		from jeu.getlisteattributsinteger.start
+		until jeu.getlisteattributsinteger.exhausted
+		loop
+			print("%N       ->Nom Attribut : "+jeu.getlisteattributsinteger.item_for_iteration.nomattribut+" Valeur attribut : "+jeu.getlisteattributsinteger.item_for_iteration.value.out)
+			jeu.getlisteattributsinteger.forth
+		end
+
+		from jeu.getlisteattributssring.start
+		until jeu.getlisteattributssring.exhausted
+		loop
+			print("%N       ->Nom Attribut : "+jeu.getlisteattributssring.item_for_iteration.nomattribut+" Valeur attribut : "+jeu.getlisteattributssring.item_for_iteration.value.out)
+			jeu.getlisteattributssring.forth
+		end
+
+
+		print("%N-------------------------------------------------------------------------------------------------------------------------")
 	end
 
 	is_comment (w:STRING):BOOLEAN
@@ -105,23 +188,19 @@ feature {ANY} -- Initialization
 		trim (s:STRING):STRING
 		do
 			s.replace_substring_all(" ","")
+			s.replace_substring_all("%T","")
 			result:=s
 
 		end
 
 		is_vocabulary (w:STRING):BOOLEAN
 		do
-			if (w.is_equal ("JEU:")) then
+			if (w.is_equal ("JEU")) then
 				result:=true
-			elseif (w.is_equal ("ACTEUR:")) then
+			elseif (w.is_equal ("ACTEUR")) then
 				result:=true
-			elseif (w.is_equal ("ITEM:")) then
-				result:=true
-			elseif (w.is_equal ("ACTION:")) then
-				result:=true
-			elseif (w.is_equal ("VITOIRE:")) then
-				result:=true
-			elseif (w.is_equal ("DEFAITE:")) then
+			elseif (w.is_equal ("ITEM")) then
+
 				result:=true
 			else
 				result:=false
@@ -130,65 +209,171 @@ feature {ANY} -- Initialization
 
 		parserFichierEtat(file : STRING)
 		local
+			fini : BOOLEAN
+
+			--gestion des splits et des lignes
 			line:STRING
-			listSplit:LIST[STRING_8]
+			--variables utilisées pour les split
+			tokensSDeuxPoint: LIST[STRING]
+			tokensSBarre	: LIST[STRING]
+			tokensSEgal		: LIST[STRING]
+
+			--gestion des classes
+			attributInt:ATTRIBUTTYPESIMPLE[INTEGER]
+			attributStr:ATTRIBUTTYPESIMPLE[STRING]
+			attributArr:ATTRIBUTARRAYOFITEM
 			acteur:ACTEUR
 			item:ITEM
 			reader :PLAIN_TEXT_FILE
 		do
+			print("%N Parsage du fichier état :")
 			create reader.make_open_read(file)
 			line:=""
+			fini:=false
 			from reader.start
-			until reader.off
+			until fini
 			loop
-				if(not is_comment(reader.last_string)) then
-					if(is_vocabulary(reader.last_string))then
-						line:=reader.last_string
-					end
 
-					if(line.is_equal ("JEU:"))then
+				if(not is_comment(trim(reader.last_string.split (':').at (1)))) then
+					if(is_vocabulary(trim(reader.last_string.split (':').at (1))))then
+						--on met à jour l'objet dont on ajoute des instances quand on est rendu à un nouveau(ITEM, ACTEUR, JEU)
+						line:=trim(reader.last_string.split (':').at (1))
+						reader.read_line
+					end
+					if(line.is_equal ("JEU"))then
+
 						--manipulation de jeu--
-						listSplit:=reader.last_string.split ('=')
-						--jeu.setAttribut(listSplit.at (0),listSplit.at (1))
-					elseif(line.is_equal ("ACTEUR:"))then
-						listSplit:=reader.last_string.split (':')
-						listSplit:=listSplit.at (1).split ('|')
-						--regarder dans la liste d'acteur
-						--from listeActeur.start
-						--until listeActeur.exhausted
-						--loop
-						--	if(listeActeur.item.getid.is_equal (listSplit.at (0)))then
-						--		acteur:=listeActeur.item
-						--		from listSplit.start
-						--		until listSplit.exhausted
-						--		loop
-						--			listSplit.forth
-									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
-								--	acteur.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
-						--		end
-						--	end--if
-						-- end
-					elseif(line.is_equal ("ITEM:"))then
-						listSplit:=reader.last_string.split (':')
-						listSplit:=listSplit.at (1).split ('|')
-						--regarder dans la liste d'item
-					--	from listeItem.start
-					--	until listeItem.off
-					--	loop
-						--	if(listeItem.item.getid.is_equal (listSplit.at (0)))then
-						--		item:=listeItem.item
-							--	from listSplit.start
-							--	until listSplit.exhausted
-							--	loop
-							--		listSplit.forth
-									--on split l'élément courant de listSplit avec '=' pour avoir le nom et la valeur de l'attribut
-								--	item.setAttribut (listSplit.item.split ('=').at (0), listSplit.item.split ('=').at (1))
-							--	end
-						--	end --if
-					--	end
-					end--elseif
+						--pre condition : tous les attributs de jeu doivent être renseignés  dans le fichier état.
+						tokensSEgal:=trim(reader.last_string).split ('=')
+
+						if(jeu.attributsregle.has_key (tokensSEgal.at (1)))then
+
+							if(jeu.attributsregle.at (tokensSEgal.at (1)).is_equal ("INTEGER"))then
+								jeu.setattributinteger (tokensSEgal.at (1),tokensSEgal.at (2).to_integer)
+							elseif(jeu.attributsregle.at (tokensSEgal.at (1)).is_equal ("STRING"))then
+								jeu.setattributstring (tokensSEgal.at (1), tokensSEgal.at (2))
+							end
+							--Si le jeu a des objets c'est dans item que ce sera definie
+						end
+
+
+					elseif(line.is_equal ("ACTEUR"))then
+
+						tokensSDeuxPoint:=trim(reader.last_string).split (':')
+						--je regarde si ce type d'acteur est définie dans les règles
+						if(tableTypeActeur.has_key(tokensSDeuxPoint.at (1))) then
+							tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
+
+							--creation de l'acteur
+							create acteur.makeacteur (tokensSBarre.at (1))
+
+							--on initialise les sacs de type array
+							from tableTypeActeur.item(tokensSDeuxPoint.at (1)).attributs.start
+							until tableTypeActeur.item(tokensSDeuxPoint.at (1)).attributs.off
+							loop
+
+								if tableTypeActeur.at (tokensSDeuxPoint.at (1)).attributs.item_for_iteration.is_equal("ARRAY") then
+								--	print("%Ntest"+tableTypeActeur.item(tokensSDeuxPoint.at (1)).typeacteur)
+									create attributArr.makeattributarray (tableTypeActeur.at (tokensSDeuxPoint.at (1)).attributs.key_for_iteration)
+									acteur.ajouterAttributArray(attributArr)
+								end
+								tableTypeActeur.item(tokensSDeuxPoint.at (1)).attributs.forth
+							end
+
+							from tokensSBarre.start
+							until tokensSBarre.exhausted
+							loop
+								tokensSBarre.forth
+								if(not tokensSBarre.exhausted)then
+									tokensSEgal:=tokensSBarre.item_for_iteration.split ('=')
+
+									--on vérifié que le nom de l'attribut qu'on veut ajouter existe bien dans la liste d'attribut du type
+									if(tableTypeActeur.at(tokensSDeuxPoint.at (1)).attributs.has_key(tokensSEgal.at (1)))then
+										--on insère l'attribut en fonction de son type dans la bonne liste
+
+										if(tableTypeActeur.at (tokensSDeuxPoint.at (1)).attributs.at (tokensSEgal.at (1)).is_equal ("INTEGER"))then
+											--creation de l'attribut de type simple
+											create attributInt.makeattribut (tokensSEgal.at (1))
+											attributInt.inserervaleur (tokensSEgal.at (2).to_integer)
+											--ajout de l'attribut
+
+											acteur.ajouterattributinteger (attributInt)
+
+										elseif(tableTypeActeur.at (tokensSDeuxPoint.at (1)).attributs.at (tokensSEgal.at (1)).is_equal ("STRING"))then
+											--creation de l'attribut de type simple
+											create attributStr.makeattribut (tokensSEgal.at (1))
+											attributStr.inserervaleur (tokensSEgal.at (2))
+
+											acteur.ajouterattributstring (attributStr)
+										end
+									end
+								end
+							end --end loop
+							tableActeur.put (acteur, acteur.getid)
+						end --end if acteur
+
+					elseif(line.is_equal ("ITEM"))then
+
+						tokensSDeuxPoint:=trim(reader.last_string).split (':')
+
+						--je regarde si ce type d'item est définie dans les règles
+
+						if(tableTypeItem.has_key(tokensSDeuxPoint.at (1))) then
+							tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
+							--creation de l'item
+							create item.makeitem (tokensSBarre.at (1))
+
+							from tokensSBarre.start
+							until tokensSBarre.exhausted
+							loop
+								tokensSBarre.forth
+								if(not tokensSBarre.exhausted)then
+									tokensSEgal:=tokensSBarre.item_for_iteration.split ('=')
+
+									--on vérifié que le nom de l'attribut qu'on veut ajouter existe bien dans la liste d'attribut du type
+									if(tableTypeItem.at(tokensSDeuxPoint.at (1)).attributs.has_key(tokensSEgal.at (1)))then
+
+
+										--on insère l'attribut en fonction de son type dans la bonne liste
+										if(tableTypeItem.at (tokensSDeuxPoint.at (1)).attributs.at (tokensSEgal.at (1)).is_equal ("INTEGER"))then
+											--creation de l'attribut de type simple
+											create attributInt.makeattribut (tokensSEgal.at (1))
+											attributInt.inserervaleur (tokensSEgal.at (2).to_integer)
+											--ajout de l'attribut
+											item.ajouterattributinteger (attributInt)
+
+										elseif(tableTypeItem.at (tokensSDeuxPoint.at (1)).attributs.at (tokensSEgal.at (1)).is_equal ("STRING"))then
+											--creation de l'attribut de type simple
+											create attributStr.makeattribut (tokensSEgal.at (1))
+											attributStr.inserervaleur (tokensSEgal.at (2))
+
+											item.ajouterattributstring (attributStr)
+
+										elseif(tableTypeItem.at (tokensSDeuxPoint.at (1)).attributs.at (tokensSEgal.at (1)).is_equal ("ARRAY"))then
+											--creation de l'attribut de type array
+											create attributArr.makeAttributArray (tokensSEgal.at (1))
+
+											item.ajouterAttributArray(attributArr)
+										end
+									elseif(tokensSEgal.at (1).is_equal ("possesseur"))then
+
+										acteur:=tableActeur.at (tokensSEgal.at (2))
+										tokensSBarre.forth
+										tokensSEgal:=tokensSBarre.item.split ('=')
+										acteur.getAttributArray(tokensSEgal.at (2)).insererItem(item)
+									end
+								end
+							end --end loop
+							tableItem.put (item, item.getid)
+						end --end if acteur
+					end--elseif item
 				end-- comment
-				reader.read_line
+				if(reader.off)then
+					fini:=true
+				else
+					reader.read_line
+				end
+
 			end --end loop
 		end --stateFile
 
@@ -203,20 +388,21 @@ feature {ANY} -- Initialization
 			partieAction	: BOOLEAN
 			partieVictoire	: BOOLEAN
 			partieDefaite	: BOOLEAN
+			definitionJeuIsValid : BOOLEAN
+
+			--variables utilisées pour les split
 			tokensSDeuxPoint: LIST[STRING]
 			tokensSBarre	: LIST[STRING]
 			tokensSEgal		: LIST[STRING]
-			nomAttribut		: STRING
 			firstSplit		: LIST[STRING]
-			definitionJeuIsValid : BOOLEAN
+
+			nomAttribut		: STRING
 			attributInt		:ATTRIBUTTYPESIMPLE[INTEGER]
 			attributString	:ATTRIBUTTYPESIMPLE[STRING]
 			attributArray	:ATTRIBUTARRAYOFITEM
 			typeActeur 		:TYPEACTEUR
 			typeItem 		:TYPEITEM
 			i				:INTEGER
-			listeActeurs	:ARRAYED_LIST[ACTEUR]
-			listeItems		:ARRAYED_LIST[ITEM]
 		do
 			partieJeu := false
 			partieActeur := false
@@ -239,7 +425,6 @@ feature {ANY} -- Initialization
 					firstSplit := ligne.split (':')
 					if trim(firstSplit.at (1)).is_equal ("JEU") then
 						partieJeu := true
-						create jeu.makejeu
 					elseif trim(firstSplit.at (1)).is_equal ("ACTEUR") then
 						partieJeu := false
 						partieActeur := true
@@ -268,7 +453,8 @@ feature {ANY} -- Initialization
 								tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
 
 								--precondition : les coordonnées en x et y sont des integer >1
-								jeu.coordonnees (trim(tokensSBarre.at (1)), trim(tokensSBarre.at (2)))
+								jeu.setattributinteger ("x", trim(tokensSBarre.at (1)).to_integer)
+								jeu.setattributinteger ("y", trim(tokensSBarre.at (2)).to_integer)
 								definitionJeuIsValid:=true
 							else
 								tokensSDeuxPoint := ligne.split (':')
@@ -282,6 +468,8 @@ feature {ANY} -- Initialization
 							tokensSDeuxPoint := ligne.split (':')
 							--on créé un type acteur en passant le nom du type en paramètre.
 							create typeActeur.maketypeacteur (tokensSDeuxPoint.at (1))
+							typeActeur.addAttribute("x","INTEGER")
+							typeActeur.addAttribute("y","INTEGER")
 							--on initialise la liste d'acteurs qui correspond à la clé qui est le type d'acteur.
 							tokensSBarre:=tokensSDeuxPoint.at (2).split ('|')
 							--on insère tous les attributs du type acteur
@@ -335,6 +523,29 @@ feature {ANY} -- Initialization
 				end
 			end
 			ficregle.close
+		end
+
+		parseFichierCommande ( fileName : STRING )
+		local
+			reader :PLAIN_TEXT_FILE
+			listSplit:LIST[STRING]
+		do
+			reader.make_open_read(filename)
+			from
+				reader.start
+			until
+				reader.off
+			loop
+				if(not is_comment(reader.last_string) )then
+					listSplit:=reader.last_string.split (' ')
+					--if(tableAction.has_key (listSplit.at (1))) then
+
+					--end
+
+				end --end if not comment
+				reader.read_line
+			end
+			reader.close
 		end
 
 end

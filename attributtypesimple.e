@@ -19,7 +19,7 @@ feature
 
 	makeattribut (nomattributbis: STRING_8)
 		do
-			nomattribut := nomattributbis
+			makeAtt(nomattributbis)
 		end
 
 	inserervaleur (valeur: G)

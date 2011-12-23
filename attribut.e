@@ -4,10 +4,15 @@ note
 	date: "$Date$"
 	revision: "$Revision$"
 
-deferred class
+class
 	ATTRIBUT
-
+	create
+ 		makeAtt
 	feature
 		nomAttribut:STRING
 
+		makeAtt(name : STRING)
+		do
+			nomAttribut:=name
+		end
 end

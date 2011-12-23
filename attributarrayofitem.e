@@ -13,9 +13,10 @@ class
 	feature
 		listeItems:ARRAYED_LIST[ITEM]
 
-		makeAttributArray
+		makeAttributArray(name : STRING)
 		do
 			create listeItems.make(0)
+			makeAtt(name)
 		end
 
 		insererItem(item:ITEM)
